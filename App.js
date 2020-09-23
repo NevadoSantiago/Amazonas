@@ -52,12 +52,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Text> Hola Cracks!!</Text>
       {user ? (
         <Profile user={user} />
       ) : (
         <Button
           disabled={!request}
-          title="Open FB Auth"
+          title="Autenticación Facebook"
           onPress={handlePressAsync}
         />
       )}

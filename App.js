@@ -1,12 +1,29 @@
-
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import * as React from "react";
 import {StyleSheet, Text, View } from "react-native";
+import { createAppContainer } from 'react-navigation';
+import ReducerStore from './src/reduxFile/store'
+import { createStackNavigator } from 'react-navigation-stack';
+import Home from './src/app/home'
+
+const AppNavigator = createStackNavigator(
+  {
+    Home: Home,
+  },
+  {
+    initialRouteName: "Home"
+  }
+);
+
+const AppContainer = createAppContainer(AppNavigator);
+let store = createStore(ReducerStore);
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>AMAZONAS</Text>
-    </View>
+    <Provider store={store}>
+        <AppContainer />
+    </Provider>
   );
 }
 

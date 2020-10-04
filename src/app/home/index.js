@@ -2,21 +2,15 @@ import React from 'react';
 import {bindActionCreators} from 'redux'
 import { connect } from 'react-redux';
 import {pruebaRedux} from '../../reduxFile/actions'
-import { Button, Text,View,StyleSheet } from 'react-native'
+import { Button, Text,View,StyleSheet } from 'react-native';
+import RegisterForm from '../RegisterForm';
 
 class Home extends React.Component{
 
     render(){
-        const {contador,pruebaRedux} = this.props
         return(
             <View>
-                <Text style={styles.textoContador}>
-                    {contador}
-                </Text>
-                <Button
-                onPress={()=>pruebaRedux(1,contador)}
-                title = "Incrementar"
-                />
+                <RegisterForm />
             </View>
         )      
     }

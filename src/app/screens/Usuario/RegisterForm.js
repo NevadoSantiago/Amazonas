@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
 import backendUrl from "../../utils/backendUrl";
 import { withNavigation } from "react-navigation";
+import {useDispatch} from 'react-redux'
+import {INICIAR_SESION} from '../../../constantes/login'
 
 function RegisterForm(props) {
+    const dispatch = useDispatch()
     const { navigation } = props;
     const [hidePassword, setHidePassword] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+     const iniciarSesion = (datos) => dispatch({type:INICIAR_SESION, data:datos})
+    
 
     const register = async () => {
       if (!email || !password) {
@@ -65,14 +71,8 @@ function RegisterForm(props) {
         })
       })
       .then(function(response){
-        return {
-                status: response.status,
-                respuesta: response.json()
-              }
-      })
-      .then(function(rta){
-        switch(rta.status){
-          case 201: console.log("Logueado")
+        switch(response.status){
+          case 201: return response.json()
           break;
           case 401: console.log("Mail incorrecto")
           break
@@ -80,9 +80,13 @@ function RegisterForm(props) {
           break
           default: console.log("ERROR codigo: " + status)
         }
+        
+      })
+      .then(function(rta){
+        iniciarSesion(rta)
       }
-      ).catch(()=>{
-        console.log("ERROR DESCONOCIDO")
+      ).catch((e)=>{
+        console.log(e)
       })
     }
   }
@@ -127,7 +131,7 @@ function RegisterForm(props) {
             title="Logearse"
             containerStyle={styles.btnContainerRegister}
             buttonStyle={styles.btnRegister}
-            onPress={() => navigation.navigate("Catalogo")}
+            onPress={login}
         />
         </View>
       </View>

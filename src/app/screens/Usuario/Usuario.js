@@ -1,9 +1,27 @@
 import React from "react";
 import RegisterForm from "./RegisterForm";
 import DatosUsuario from "./DatosUsuario";
+import { connect } from 'react-redux';
 
-export default function UsuarioScreen() {
-    const estaLogeado = false; // como hago para consultar el store??
+class UsuarioScreen extends React.Component {
 
-    return estaLogeado ? <DatosUsuario /> : <RegisterForm />
+    render(){
+        const {mailUsuario} = this.props
+        return(
+            mailUsuario ? <DatosUsuario /> : <RegisterForm />
+        )  
+    }
+
 }
+
+
+
+  const mapStateToProps = state => {
+    return{
+        mailUsuario: state.user.mailUsuario
+    }
+  }
+
+
+  
+  export default connect(mapStateToProps, null)(UsuarioScreen)

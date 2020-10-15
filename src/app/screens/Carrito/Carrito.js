@@ -1,10 +1,25 @@
 import React from "react";
-import {View,Text} from "react-native";
+import RegisterForm from "../Usuario/RegisterForm";
+import MostrarCarrito from './MostrarCarrito'
+import { connect } from 'react-redux';
 
-export default function CarritoScreen() {
-    return(
-        <View>
-            <Text> Esto es el Carrito </Text>
-        </View>
-    );
+class Carrito extends React.Component {
+
+    render(){
+        const {mailUsuario} = this.props
+        return(
+            mailUsuario ? <MostrarCarrito /> : <RegisterForm />
+        )  
+    }
+
 }
+
+  const mapStateToProps = state => {
+    return{
+        mailUsuario: state.user.mailUsuario
+    }
+  }
+
+
+  
+  export default connect(mapStateToProps, null)(Carrito)

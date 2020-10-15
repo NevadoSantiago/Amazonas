@@ -10,72 +10,81 @@ export default function RegisterForm() {
     const [password, setPassword] = useState("");
 
     const register = async () => {
-  
       if (!email || !password) {
         console.log("ERROR todos los campos son obligatorios")
-      } else {
-        await fetch(`${backendUrl}/api/users`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          })
-        }).then((response) => (response.status))
-        .then(status => {
-          if (status===201){
-            console.log("Usuario creado correctamente");
-          }
-          else if (status===409){
-            console.log("Ya existe este correo, intente con otro");
-          }
-          else if (status===400){
-            console.log("Bad request");
-          }
+      }else{
+      const url = backendUrl+"/users/new"
+      await fetch(url, {
+        method:"POST",
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email:email ,
+          pass: password,
         })
-          .catch(() => {
-            console.log("Error desconocido, intente más tarde");
-          }); 
+      })
+      .then(function(response){
+        return {
+                status: response.status,
+                respuesta: response.json()
+              }
+      })
+      .then(function(rta){
+        switch(rta.status){
+          case 201: console.log("Creado")
+          break;
+          case 401: console.log("Mail usado")
+          break
+          default: console.log("ERROR codigo: " + status)
+        }
       }
-        
+      ).catch(()=>{
+        console.log("ERROR DESCONOCIDO")
+      })
     }
+  }
+
 
     const login = async () => {
-  
       if (!email || !password) {
         console.log("ERROR todos los campos son obligatorios")
-      } else {
-        await fetch(`${backendUrl}/api/users`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          })
-        }).then((response) => (response.status))
-        .then(status => {
-          if (status===200){
-            console.log("Logeado correctamente");
-          }
-          else if (status===401){
-            console.log("Contraseña incorrecta");
-          }
-          else if (status===400){
-            console.log("Bad request");
-          }
+      }else{
+      const url = backendUrl+"/users/login"
+      await fetch(url, {
+        method:"POST",
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email:email ,
+          pass: password,
         })
-          .catch(() => {
-            console.log("Error desconocido, intente más tarde");
-          }); 
+      })
+      .then(function(response){
+        return {
+                status: response.status,
+                respuesta: response.json()
+              }
+      })
+      .then(function(rta){
+        switch(rta.status){
+          case 201: console.log("Logueado")
+          break;
+          case 401: console.log("Mail incorrecto")
+          break
+          case 402: console.log("Contrasena incorrecta")
+          break
+          default: console.log("ERROR codigo: " + status)
+        }
       }
+      ).catch(()=>{
+        console.log("ERROR DESCONOCIDO")
+      })
     }
-  
+  }
 
   return (
     <KeyboardAwareScrollView>

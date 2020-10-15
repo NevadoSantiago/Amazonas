@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import {pruebaRedux} from '../../reduxFile/actions'
 import { Button, Text,View,StyleSheet } from 'react-native';
 import RegisterForm from '../RegisterForm';
+import TabBarContainer from '../Navigator';
 
 class Home extends React.Component{
 
     render(){
+        const estaLogeado = false;
         return(
-            <View>
-                <RegisterForm />
-            </View>
+            estaLogeado ? <RegisterForm /> : <TabBarContainer />
         )      
     }
 

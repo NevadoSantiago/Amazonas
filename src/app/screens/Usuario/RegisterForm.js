@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import backendUrl from "../app/utils/backendUrl";
+import backendUrl from "../../utils/backendUrl";
+import { withNavigation } from "react-navigation";
 
-export default function RegisterForm() {
+function RegisterForm(props) {
+    const { navigation } = props;
     const [hidePassword, setHidePassword] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -87,7 +88,6 @@ export default function RegisterForm() {
   }
 
   return (
-    <KeyboardAwareScrollView>
       <View style={styles.viewForm}>
         <View style={styles.formContainer}>
         <Input
@@ -127,13 +127,13 @@ export default function RegisterForm() {
             title="Logearse"
             containerStyle={styles.btnContainerRegister}
             buttonStyle={styles.btnRegister}
-            onPress={login}
+            onPress={() => navigation.navigate("Catalogo")}
         />
         </View>
       </View>
-    </KeyboardAwareScrollView>
   );
 }
+export default withNavigation(RegisterForm);
 
 const styles = StyleSheet.create({
   viewForm: {

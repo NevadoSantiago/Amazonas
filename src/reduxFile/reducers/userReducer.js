@@ -1,5 +1,5 @@
-import { addons } from "react-native";
-import {CERRAR_SESION,INICIAR_SESION,PRUEBA_REDUX} from '../../constantes/login'
+
+import {CERRAR_SESION,INICIAR_SESION,SET_PRODUCTOS_CARRITO} from '../../constantes/login'
 import {ERROR} from '../../constantes/log'
 
 
@@ -10,7 +10,8 @@ const initialState={
     token:null,
     contador:0,
     mailUsuario:null,
-    productos : null,
+    idProductos : null,
+    productos : null
 };
 
 
@@ -23,29 +24,32 @@ const UserReducer = (state = initialState, action) => {
             const rol = datos.rol
             const token = datos.token
             const mail = datos.email
-            const productos = datos.productos
+            const idProductos = datos.productos
             return{
                 ...state,
                 idUsuario: id,
                 rol : rol,
                 token: token,
                 mailUsuario: mail,
-                productos:productos
+                idProductos:idProductos
             }
         }
         case(CERRAR_SESION):{
             return{
                 ...state,
                 idUsuario:null,
+                rol:null,
                 nombreUsuario:null,
                 token:null,
                 mailUsuario:null,
+                idProductos:null,
+                productos:null
             }
         }
-        case(PRUEBA_REDUX):{
+        case(SET_PRODUCTOS_CARRITO):{
             return{
                 ...state,
-                contador: action.data
+                productos:datos
             }
         }
         case(ERROR):{

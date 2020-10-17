@@ -1,4 +1,4 @@
-import {INICIAR_SESION, CERRAR_SESION,PRUEBA_REDUX} from '../../constantes/login'
+import {INICIAR_SESION, CERRAR_SESION,SET_PRODUCTOS_CARRITO} from '../../constantes/login'
 import {ERROR} from '../../constantes/log'
 
 export const iniciarSesion = (data) =>{
@@ -33,5 +33,13 @@ export const pruebaRedux = (incrementar,acumulador) =>{
         type: PRUEBA_REDUX,
         data: incrementar + acumulador
 
+    }
+}
+
+export const setProductosCarrito = (productos) =>{
+
+    return{
+        type:SET_PRODUCTOS_CARRITO,
+        data:productos
     }
 }

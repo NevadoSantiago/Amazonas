@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "react-native-elements";
+import { Icon,withBadge ,Badge,View } from "react-native-elements";
 
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
@@ -8,6 +8,15 @@ import CarritoScreenStacks from "./stacks/CarritoStacks";
 import CatalogoScreenStacks from "./stacks/CatalogoStacks";
 import UsuarioScreenStacks from "./stacks/UsuarioStacks";
 import ComprasScreenStacks from "./stacks/ComprasStacks";
+import store from '../reduxFile/store/store'
+
+const state = store.getState();
+const {idProductos} = state.user
+var cantidadProductosEnCarrito = 0
+if(idProductos){
+  cantidadProductosEnCarrito=idProductos.lenght
+}
+
 
 const NavigationStacks = createBottomTabNavigator(
   {
@@ -15,28 +24,38 @@ const NavigationStacks = createBottomTabNavigator(
       screen: CatalogoScreenStacks,
       navigationOptions: () => ({
         tabBarLabel: "Catalogo",
-        tabBarIcon: ({ tintColor }) => (
-          <Icon
-            type="material-community"
-            name="store"
-            size={22}
-            color={tintColor}
-          />
-        ),
+        tabBarIcon: ({ tintColor }) => {
+          return(
+            <Icon
+              type="material-community"
+              name="store"
+              size={22}
+              color={tintColor}
+              />
+          )
+
+        },
       }),
     },
     Carrito: {
       screen: CarritoScreenStacks,
       navigationOptions: () => ({
         tabBarLabel: "Carrito",
-        tabBarIcon: ({ tintColor }) => (
-          <Icon
-            type="material-community"
-            name="cart"
-            size={22}
-            color={tintColor}
-          />
-        ),
+        tabBarIcon: ({ tintColor }) => 
+          {
+            return(
+            <React.Fragment>
+              <Badge value={cantidadProductosEnCarrito} status="error" />
+              <Icon
+              type="material-community"
+              name="cart"
+              size={22}
+              color={tintColor}
+            />
+            </React.Fragment>
+            )
+          }
+        ,
       }),
     },
     Compras: {

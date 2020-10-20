@@ -1,4 +1,5 @@
 import {INICIAR_SESION, CERRAR_SESION,SET_PRODUCTOS_CARRITO} from '../../constantes/login'
+import {SET_PRODUCTOS} from '../../constantes/productos'
 import {ERROR} from '../../constantes/log'
 
 export const iniciarSesion = (data) =>{
@@ -40,6 +41,14 @@ export const setProductosCarrito = (productos) =>{
 
     return{
         type:SET_PRODUCTOS_CARRITO,
+        data:productos
+    }
+}
+
+export const setProductosCategorias = (productos) =>{
+
+    return{
+        type:SET_PRODUCTOS,
         data:productos
     }
 }

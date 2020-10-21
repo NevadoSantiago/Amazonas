@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 class Carrito extends React.Component {
 
     render(){
-        const {mailUsuario} = this.props
+        const {mailUsuario,productos} = this.props
         return(
-            mailUsuario ? <MostrarCarrito /> : <RegisterForm />
+            mailUsuario ? <MostrarCarrito productos={productos} /> : <RegisterForm />
         )  
     }
 
@@ -16,6 +16,7 @@ class Carrito extends React.Component {
 
   const mapStateToProps = state => {
     return{
+        productos: state.user.productos,
         mailUsuario: state.user.mailUsuario
     }
   }

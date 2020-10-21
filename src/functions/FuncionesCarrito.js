@@ -8,3 +8,14 @@ export const calcularPrecioTotalCarrito = (productos) =>{
 
     return precioTotal
 }
+
+export const agregarProductoCarrito = (producto,store) =>{
+
+  if(store){
+    store.push(producto)
+    return store;
+  }else{
+    return [producto]
+  }
+
+}

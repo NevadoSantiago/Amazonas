@@ -48,12 +48,13 @@ class MostrarCarrito extends React.Component {
   render() {
     const { productos } = this.props
     if (productos && productos.lenght != 0) {
+      console.log(productos)
       var precioTotal = calcularPrecioTotalCarrito(productos)
       var tituloBoton = "Comprar   ( $" + precioTotal + ")"
       return (
         <React.Fragment>
           <ScrollView>
-            {productos.map((producto) => {
+            {productos.map((producto,key) => {
               return (
                 showProductCardCarrito(producto)
               )

@@ -91,7 +91,7 @@ class CatalogoScreen extends React.Component {
       label:"Mostrar todo",
       value:"Todo"
     })
-    categorias.map((categoria) => {
+    categorias.map((categoria,key) => {
       items.push({
         label: categoria.categoria,
         value: categoria.categoria,

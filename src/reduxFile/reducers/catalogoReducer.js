@@ -5,7 +5,8 @@ import {ERROR} from '../../constantes/log'
 
 const initialState={
     categorias:null,
-    productos:null
+    productos:null,
+
 };
 
 
@@ -26,6 +27,7 @@ const CatalogoReducer = (state = initialState, action) => {
                 productos:datos
             }
         }
+        
     }
     return{
         ...state

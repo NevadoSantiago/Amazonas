@@ -1,5 +1,5 @@
 
-import {CERRAR_SESION,INICIAR_SESION,SET_PRODUCTOS_CARRITO} from '../../constantes/login'
+import {CERRAR_SESION,INICIAR_SESION,SET_PRODUCTOS_CARRITO,SET_ACTUALIZAR_CARRITO} from '../../constantes/login'
 import {ERROR} from '../../constantes/log'
 
 
@@ -11,7 +11,8 @@ const initialState={
     contador:0,
     mailUsuario:null,
     idProductos : null,
-    productos : null
+    productos : null,
+    actualizarCarrito:false
 };
 
 
@@ -49,7 +50,14 @@ const UserReducer = (state = initialState, action) => {
         case(SET_PRODUCTOS_CARRITO):{
             return{
                 ...state,
-                productos:datos
+                productos:datos,
+                actualizarCarrito:true
+            }
+        }
+        case(SET_ACTUALIZAR_CARRITO):{
+            return{
+                ...state,
+                actualizarCarrito:datos
             }
         }
         case(ERROR):{

@@ -1,11 +1,9 @@
 import React from "react";
 import { connect } from 'react-redux';
-import { ADD_PRODUCT_CARRITO, SET_PRODUCTOS } from '../constantes/productos'
 import { Card, Button, Icon } from 'react-native-elements'
 import { agregarProductoCarrito } from '../functions/FuncionesCarrito'
 import store from '../reduxFile/store/store'
 import {
-  Alert,
   Modal,
   StyleSheet,
   Text,
@@ -16,7 +14,8 @@ import {
   Image,
 } from "react-native";
 import { Slider } from 'react-native-elements';
-import { Divider } from '@material-ui/core';
+import { SET_PRODUCTOS_CARRITO } from "../constantes/login";
+import backendUrl from "../app/utils/backendUrl";
 
 
 class ProductosCategoria extends React.Component {
@@ -49,7 +48,7 @@ class ProductosCategoria extends React.Component {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <Text style={styles.modalText}>{productoSeleccionado.nombre}</Text>
-                <Text style={{fontSize:15}}>{productoSeleccionado.descripcion}</Text>
+                <Text style={{ fontSize: 15 }}>{productoSeleccionado.descripcion}</Text>
                 <Image
                   style={styles.tinyLogo}
                   source={{ uri: productoSeleccionado.url }}>
@@ -69,11 +68,19 @@ class ProductosCategoria extends React.Component {
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                   onPress={() => {
+                    this.agregarProductoCarritoStoreYBack(productoSeleccionado)
                     this.setModalVisible(!modalVisible);
                   }}
                 >
-
                   <Text style={styles.textStyle}>Agregar</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "red" }}
+                  onPress={() => {
+                    this.setModalVisible(!modalVisible);
+                  }}
+                >
+                  <Text style={styles.textStyle}>Cerrar</Text>
                 </TouchableHighlight>
               </View>
             </View>
@@ -83,13 +90,36 @@ class ProductosCategoria extends React.Component {
     }
 
   }
+  saveProductsBack = async (product, value) => {
+    const { mailUsuario } = this.props
+    const { id } = product
+    const url = backendUrl + '/users/addProduct/' + id + '/' + mailUsuario + '/' + value
+    await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(function (response) {
+        return response.json()
+      })
+      .then(function (rta) {
+        productosCargados = rta
+      }
+      )
+  }
 
   agregarProductoCarritoStoreYBack = (product) => {
     var state = store.getState();
+    const { value } = this.state
     const { setProductsStore } = this.props
-    const storeCargado = agregarProductoCarrito(product, state.user.productos)
+    const storeCargado = agregarProductoCarrito(product, state.user.productos, value)
     setProductsStore(storeCargado)
-    console.log(this.props)
+    this.saveProductsBack(product, value)
+    this.setState({
+      value: 1
+    })
   }
 
   showProductCardCatalogo = (product, logueado) => {
@@ -116,7 +146,6 @@ class ProductosCategoria extends React.Component {
                   borderBottomColor: "#A6B4B4"
                 }}
                 disabled={!logueado}
-                //onPress={(e)=>{this.agregarProductoCarritoStoreYBack(product)}}
                 onPress={(e) => {
                   this.setState({
                     modalVisible: true,
@@ -145,8 +174,8 @@ class ProductosCategoria extends React.Component {
     } else {
       logueado = false
     }
-    return ( 
-        <ScrollView>
+    return (
+      <ScrollView>
         {productos.map((producto, key) => {
           producto.key = key
           return (
@@ -154,15 +183,14 @@ class ProductosCategoria extends React.Component {
           )
         })}
       </ScrollView>
-      )
+    )
   }
 
   render() {
     const { productosCategoria } = this.props
-
     if (productosCategoria) {
       return (
-        <View style={{marginBottom:110}}>
+        <View style={{ marginBottom: 110 }}>
           {this.showModal()}
           {this.showProducts(productosCategoria)}
         </View>
@@ -209,6 +237,7 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     width: 300,
+    marginTop:10
   },
   textStyle: {
     color: "white",
@@ -217,7 +246,7 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontWeight: "bold",
-    fontSize: 50,
+    fontSize: 30,
     marginBottom: 15,
     textAlign: "center"
   }
@@ -233,7 +262,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    setProductsStore: (productos) => dispatch({ type: SET_PRODUCTOS, data: productos }),
+    setProductsStore: (productos) => dispatch({ type: SET_PRODUCTOS_CARRITO, data: productos }),
   }
 }
 

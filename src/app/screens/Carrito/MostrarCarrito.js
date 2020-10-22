@@ -3,10 +3,17 @@ import { View, Text, Button, ScrollView, ActivityIndicator, Image, StyleSheet } 
 import { connect } from 'react-redux';
 import backendUrl from '../../utils/backendUrl'
 import { SET_PRODUCTOS_CARRITO } from "../../../constantes/login";
-import {showProductCardCarrito} from '../../../components/ProductCard'
+import { showProductCardCarrito } from '../../../components/ProductCard'
 import { calcularPrecioTotalCarrito } from '../../../functions/FuncionesCarrito'
 
 class MostrarCarrito extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      refreshing: false
+    }
+  }
 
   loadProducts = async (productos) => {
     var productosCargados = null
@@ -45,16 +52,17 @@ class MostrarCarrito extends React.Component {
 
   }
 
+
   render() {
-    const { productos } = this.props
-    if (productos && productos.lenght != 0) {
-      console.log(productos)
+    const { productos,idProductos } = this.props
+    if (productos && productos.length != 0) {
       var precioTotal = calcularPrecioTotalCarrito(productos)
       var tituloBoton = "Comprar   ( $" + precioTotal + ")"
       return (
         <React.Fragment>
           <ScrollView>
-            {productos.map((producto,key) => {
+
+            {productos.map((producto, key) => {
               return (
                 showProductCardCarrito(producto)
               )

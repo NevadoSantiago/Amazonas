@@ -129,7 +129,7 @@ class CatalogoScreen extends React.Component {
         productosMostrados: productosCategoria
       })
     }else{
-        var productosFiltrados = productosCategoria.filter((producto)=> producto.nombre.toUpperCase().startsWith(filtro.toUpperCase()))
+        var productosFiltrados = productosCategoria.filter((producto)=> producto.nombre.toUpperCase().includes(filtro.toUpperCase()))
       this.setState({
         productosMostrados: productosFiltrados
       })

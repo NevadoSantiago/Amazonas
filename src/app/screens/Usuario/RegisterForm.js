@@ -1,10 +1,20 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View,AsyncStorage  } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
 import backendUrl from "../../utils/backendUrl";
 import { withNavigation } from "react-navigation";
 import {useDispatch} from 'react-redux'
 import {INICIAR_SESION} from '../../../constantes/login'
+import { Cache } from "react-native-cache";
+
+const cache = new Cache({
+  namespace: "myapp",
+  policy: {
+      maxEntries: 50000
+  },
+  backend: AsyncStorage
+});
+
 
 function RegisterForm(props) {
     const dispatch = useDispatch()
@@ -82,7 +92,8 @@ function RegisterForm(props) {
         }
         
       })
-      .then(function(rta){
+      .then(async function(rta){
+        await cache.set("token", rta.token);
         iniciarSesion(rta)
       }
       ).catch((e)=>{
@@ -93,6 +104,7 @@ function RegisterForm(props) {
 
   return (
       <View style={styles.viewForm}>
+        
         <View style={styles.formContainer}>
         <Input
             placeholder="Correo electronico"

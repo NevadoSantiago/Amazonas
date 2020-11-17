@@ -4,6 +4,9 @@ import { Icon,withBadge ,Badge,View } from "react-native-elements";
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
+
+import {AsyncStorage} from "react-native"
+import { Cache } from "react-native-cache";
 import CarritoScreenStacks from "./stacks/CarritoStacks";
 import CatalogoScreenStacks from "./stacks/CatalogoStacks";
 import UsuarioScreenStacks from "./stacks/UsuarioStacks";
@@ -18,8 +21,16 @@ if(idProductos){
 }
 
 
+const cache = new Cache({
+  namespace: "myapp",
+  policy: {
+      maxEntries: 50000
+  },
+  backend: AsyncStorage
+});
+
 const NavigationStacks = createBottomTabNavigator(
-  {
+   {
     Catalogo: {
       screen: CatalogoScreenStacks,
       navigationOptions: () => ({
@@ -96,5 +107,14 @@ const NavigationStacks = createBottomTabNavigator(
     },
   }
 );
+/* class Navigator extends React.Component{
 
-export default createAppContainer(NavigationStacks);
+  render(){
+    return(
+      createAppContainer(NavigationStacks)
+    )
+  }
+
+} */
+
+export default createAppContainer(NavigationStacks) ;

@@ -4,10 +4,14 @@ import { Icon,withBadge ,Badge,View } from "react-native-elements";
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
+
+import {AsyncStorage} from "react-native"
+import { Cache } from "react-native-cache";
 import CarritoScreenStacks from "./stacks/CarritoStacks";
 import CatalogoScreenStacks from "./stacks/CatalogoStacks";
 import UsuarioScreenStacks from "./stacks/UsuarioStacks";
 import ComprasScreenStacks from "./stacks/ComprasStacks";
+import FinalizarCompraStack from './stacks/FinalizarCompraStack'
 import store from '../reduxFile/store/store'
 
 const state = store.getState();
@@ -18,8 +22,16 @@ if(idProductos){
 }
 
 
+const cache = new Cache({
+  namespace: "myapp",
+  policy: {
+      maxEntries: 50000
+  },
+  backend: AsyncStorage
+});
+
 const NavigationStacks = createBottomTabNavigator(
-  {
+   {
     Catalogo: {
       screen: CatalogoScreenStacks,
       navigationOptions: () => ({
@@ -45,7 +57,6 @@ const NavigationStacks = createBottomTabNavigator(
           {
             return(
             <React.Fragment>
-              <Badge value={cantidadProductosEnCarrito} status="error" />
               <Icon
               type="material-community"
               name="cart"
@@ -86,15 +97,38 @@ const NavigationStacks = createBottomTabNavigator(
         ),
       }),
     },
+    FinalizarCompra: {
+      screen: FinalizarCompraStack,
+      navigationOptions: () => ({
+        tabBarLabel: "Comprar",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon
+            type="material-community"
+            name="shopping"
+            size={22}
+            color={tintColor}
+          />
+        ),
+      }),
+    },
   },
   {
     initialRouteName: "Catalogo",
-    order: ["Catalogo", "Carrito", "Compras", "Usuario"],
+    order: ["Catalogo", "Carrito", "Compras", "Usuario", "FinalizarCompra"],
     tabBarOptions: {
       inactiveTintColor: "#646464",
       activeTintColor: "#00a680",
     },
   }
 );
+/* class Navigator extends React.Component{
 
-export default createAppContainer(NavigationStacks);
+  render(){
+    return(
+      createAppContainer(NavigationStacks)
+    )
+  }
+
+} */
+
+export default createAppContainer(NavigationStacks) ;

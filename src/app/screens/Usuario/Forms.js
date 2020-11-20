@@ -7,16 +7,15 @@ import {useDispatch} from 'react-redux'
 import {INICIAR_SESION} from '../../../constantes/login'
 import { Cache } from "react-native-cache";
 
-const cache = new Cache({
+
+    const cache = new Cache({
   namespace: "myapp",
   policy: {
       maxEntries: 50000
   },
   backend: AsyncStorage
 });
-
-
-function RegisterForm(props) {
+export function LoginForm(props) {
     const dispatch = useDispatch()
     const { navigation } = props;
     const [hidePassword, setHidePassword] = useState(true);
@@ -62,6 +61,17 @@ function RegisterForm(props) {
       })
     }
   }
+}
+
+
+export function RegisterFormm(props) {
+    const dispatch = useDispatch()
+    const { navigation } = props;
+    const [hidePassword, setHidePassword] = useState(true);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+     const iniciarSesion = (datos) => dispatch({type:INICIAR_SESION, data:datos})
 
 
     const login = async () => {
@@ -137,7 +147,8 @@ function RegisterForm(props) {
             title="Registrarse"
             containerStyle={styles.btnContainerRegister}
             buttonStyle={styles.btnRegister}
-            onPress={register}
+           // onPress={register}
+           onPress={(ew) => {navigation.navigate("Catalogo")}}
         />
         <Button
             title="Logearse"
@@ -149,7 +160,6 @@ function RegisterForm(props) {
       </View>
   );
 }
-export default withNavigation(RegisterForm);
 
 const styles = StyleSheet.create({
   viewForm: {

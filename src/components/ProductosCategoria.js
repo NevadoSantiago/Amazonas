@@ -34,6 +34,7 @@ class ProductosCategoria extends React.Component {
       modalVisible: visibilidad
     })
   }
+  
 
   showModal = () => {
     const { modalVisible, productoSeleccionado } = this.state
@@ -91,9 +92,11 @@ class ProductosCategoria extends React.Component {
 
   }
   saveProductsBack = async (product, value) => {
+    
     const { mailUsuario } = this.props
     const { id } = product
     const url = backendUrl + '/users/addProduct/' + id + '/' + mailUsuario + '/' + value
+    console.log(url)
     await fetch(url, {
       method: "POST",
       headers: {

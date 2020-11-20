@@ -34,6 +34,7 @@ class ProductosCategoria extends React.Component {
       modalVisible: visibilidad
     })
   }
+  
 
   showModal = () => {
     const { modalVisible, productoSeleccionado } = this.state

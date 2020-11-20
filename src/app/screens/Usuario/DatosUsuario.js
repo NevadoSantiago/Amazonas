@@ -1,6 +1,7 @@
 import React from "react";
-import {View,Text,Button, AsyncStorage} from "react-native";
+
 import store from '../../../reduxFile/store/store'
+import {AsyncStorage,View,Text,Button} from 'react-native'
 import {useDispatch} from 'react-redux'
 import {CERRAR_SESION} from '../../../constantes/login'
 import { Cache } from "react-native-cache";

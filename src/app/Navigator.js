@@ -11,6 +11,7 @@ import CarritoScreenStacks from "./stacks/CarritoStacks";
 import CatalogoScreenStacks from "./stacks/CatalogoStacks";
 import UsuarioScreenStacks from "./stacks/UsuarioStacks";
 import ComprasScreenStacks from "./stacks/ComprasStacks";
+import FinalizarCompraStack from './stacks/FinalizarCompraStack'
 import store from '../reduxFile/store/store'
 
 const state = store.getState();
@@ -56,7 +57,6 @@ const NavigationStacks = createBottomTabNavigator(
           {
             return(
             <React.Fragment>
-              <Badge value={cantidadProductosEnCarrito} status="error" />
               <Icon
               type="material-community"
               name="cart"
@@ -97,10 +97,24 @@ const NavigationStacks = createBottomTabNavigator(
         ),
       }),
     },
+    FinalizarCompra: {
+      screen: FinalizarCompraStack,
+      navigationOptions: () => ({
+        tabBarLabel: "Comprar",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon
+            type="material-community"
+            name="shopping"
+            size={22}
+            color={tintColor}
+          />
+        ),
+      }),
+    },
   },
   {
     initialRouteName: "Catalogo",
-    order: ["Catalogo", "Carrito", "Compras", "Usuario"],
+    order: ["Catalogo", "Carrito", "Compras", "Usuario", "FinalizarCompra"],
     tabBarOptions: {
       inactiveTintColor: "#646464",
       activeTintColor: "#00a680",

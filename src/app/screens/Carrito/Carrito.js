@@ -16,7 +16,7 @@ class Carrito extends React.Component {
             return (<ActivityIndicator></ActivityIndicator>)
         } else if (mailUsuario) {
             return (
-                <MostrarCarrito predito={productos} />
+                <MostrarCarrito />
             )
         } else {
             return (

@@ -1,13 +1,12 @@
 import React from "react";
 import { connect } from "react-redux"
-import { Text, View} from "react-native";
+import { Text, View,ActivityIndicator} from "react-native";
 import { SET_CATEGORIAS, SET_PRODUCTOS } from '../../../constantes/productos'
 import backendUrl from '../../utils/backendUrl'
 import ProductosCategoria from '../../../components/ProductosCategoria'
 import RNPickerSelect from 'react-native-picker-select';
 import { SearchBar } from 'react-native-elements';
 
-var productosMostradosConFiltro = null
 
 class CatalogoScreen extends React.Component {
 
@@ -170,7 +169,7 @@ class CatalogoScreen extends React.Component {
       )
     }
     else {
-      return (<Text>Hola</Text>)
+      return (<ActivityIndicator/>)
     }
 
   }

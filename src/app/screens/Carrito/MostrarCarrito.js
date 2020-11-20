@@ -5,6 +5,7 @@ import backendUrl from '../../utils/backendUrl'
 import { SET_PRODUCTOS_CARRITO } from "../../../constantes/login";
 import { showProductCardCarrito } from '../../../components/ProductCard'
 import { calcularPrecioTotalCarrito } from '../../../functions/FuncionesCarrito'
+import { withNavigation } from "react-navigation";
 
 class MostrarCarrito extends React.Component {
 
@@ -68,7 +69,7 @@ class MostrarCarrito extends React.Component {
               )
             })}
           </ScrollView>
-          <Button color="#008000" title={tituloBoton}></Button>
+          <Button onPress={()=>{this.props.navigation.navigate("FinalizarCompra",{precioTotal:{precioTotal}})}} color="#008000" title={tituloBoton}></Button>
         </React.Fragment>
       )
     } else {
@@ -108,4 +109,4 @@ const mapDispatchToProps = dispatch => {
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(MostrarCarrito)
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(MostrarCarrito))

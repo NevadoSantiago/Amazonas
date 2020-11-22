@@ -43,12 +43,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         height: '8%',
         bottom: 0,
-        backgroundColor:'#1E6738',
-        borderRadius:10,
+        backgroundColor:'green',
         borderWidth: 1,
         borderColor: '#fff',
-        justifyContent:'center',
-        marginBottom: 20
+        justifyContent:'center'
       },
       loginText:{
           color:'#fff',

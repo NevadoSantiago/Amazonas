@@ -17,7 +17,7 @@ import backendUrl from "../../utils/backendUrl";
     useEffect(validarCampos,[nombre,apellido,direccion,email,password,password2])
 
     function validarCampos(){
-        if (nombre && apellido && direccion && email && password && password2 && password == password2 ){
+        if (nombre && apellido && direccion && email && password && password2 && password == password2 && validateEmail(email)){
             setPuedeEnviar(true)
         }else{
             setPuedeEnviar(false)
@@ -67,6 +67,11 @@ import backendUrl from "../../utils/backendUrl";
     const  volver = () =>{
         setRegistrarse(false)
 
+    }
+
+    function validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
     }   
 
     return(

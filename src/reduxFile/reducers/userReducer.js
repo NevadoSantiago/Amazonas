@@ -6,10 +6,12 @@ import {ERROR} from '../../constantes/log'
 const initialState={
     idUsuario:null,
     nombreUsuario:null,
+    apellidoUsuario:null,
+    direccionUsuario:null,
+    mailUsuario:null,
     rol:null,
     token:null,
     contador:0,
-    mailUsuario:null,
     idProductos : null,
     productos : null,
     actualizarCarrito:false
@@ -22,16 +24,22 @@ const UserReducer = (state = initialState, action) => {
     switch(action.type){   
         case(INICIAR_SESION):{
             const id = datos.id
+            const nombre = datos.nombre
+            const apellido = datos.apellido
+            const direccion =datos.direccion
+            const mail = datos.email
             const rol = datos.rol
             const token = datos.token
-            const mail = datos.email
             const idProductos = datos.productos
             return{
                 ...state,
                 idUsuario: id,
+                nombreUsuario:nombre,
+                apellidoUsuario:apellido,
+                direccionUsuario:direccion,
+                mailUsuario: mail,
                 rol : rol,
                 token: token,
-                mailUsuario: mail,
                 idProductos:idProductos
             }
         }

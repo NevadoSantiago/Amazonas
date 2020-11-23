@@ -1,7 +1,7 @@
 import React from "react";
 
 import store from '../../../reduxFile/store/store'
-import {AsyncStorage,View,Text,Button} from 'react-native'
+import {AsyncStorage,View,Text,Button, StyleSheet} from 'react-native'
 import {useDispatch} from 'react-redux'
 import {CERRAR_SESION} from '../../../constantes/login'
 import { Cache } from "react-native-cache";
@@ -23,14 +23,38 @@ export default function DatosUsuario() {
     } 
 
     const state = store.getState();
-    const {mailUsuario,nombreUsuario} = state.user
+    const {nombreUsuario, apellidoUsuario, direccionUsuario, mailUsuario, rol} = state.user
+
     return(
-        <View>
-            <Text>Bienvenido a los datos del usuario</Text>
-            <Text>{mailUsuario}</Text>
-            <Text>{nombreUsuario}</Text>
-            <Button title="Cerrar Sesion" onPress={(e)=>cerrarSesion()}></Button>
+        <View style={styles.todo}>
+            <Text style={styles.titulo}>Bienvenido a los datos del usuario</Text>
+            <Text style={styles.datos}>Nombre: {nombreUsuario}</Text>
+            <Text style={styles.datos}>Apellido: {apellidoUsuario}</Text>
+            <Text style={styles.datos}>Direccion: {direccionUsuario}</Text>
+            <Text style={styles.datos}>Email: {mailUsuario}</Text>
+            <Text style={styles.datos}>Rol: {rol}</Text>
+
+            <Button 
+                title="Cerrar Sesion" 
+                onPress={(e)=>cerrarSesion()}
+            />
+
 
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    todo: {
+        alignSelf: "center"
+    },
+    titulo:{
+        fontSize:20
+    },
+    datos: {
+        fontSize:16,
+        alignSelf: "center",
+        margin:5
+    }
+  })
+  

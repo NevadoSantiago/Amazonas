@@ -7,6 +7,8 @@ import { calcularPrecioTotalCarrito } from '../../../functions/FuncionesCarrito'
 import { Card,  Icon,Input,Button } from 'react-native-elements'
 import FlipCard from 'react-native-flip-card'
 import RNPickerSelect from 'react-native-picker-select';
+import {loadMunicipios,loadProvincias} from '../../../functions/FetchService'
+import {buildItemsPicker, buildItemsPickerMunicipio} from '../../../functions/Utils'
 const longitudDesdeadaInput = {
   numeroTarjetaInput:16,
   vencimientoInput:5,
@@ -35,72 +37,41 @@ class FinalizarCompra extends React.Component{
       municipioSeleccionado:null
     }
   }
-  buildItemsPicker = () => {
-    const {provincias} = this.state
-    var items = []
-    if(provincias){
-      provincias.map((provincia,key) => {
-        items.push({
-          label: provincia.nombre,
-          value: provincia.id,
-        })
-      })
-    }
-
-    return items
+  async componentDidMount (){
+    const {productos} = this.props
+    const precioCompra =calcularPrecioTotalCarrito(productos)
+    const impuesto = precioCompra * 0.06
+    const envio = 450
+    const precioTotal = precioCompra + impuesto+envio
+    this.setState({
+      precioCompra,
+      impuesto,
+      envio,
+      precioTotal,
+    })
+    const provincias =await loadProvincias()
+    this.setState({
+      provincias : provincias.provincias
+    })
   }
+
   searchMunicipios = async (codProvincia) => {
-    const municipios = await this.loadMunicipios(codProvincia)
+    this.setState({
+      provinciaSeleccionada : codProvincia
+    })
+    const municipios = await loadMunicipios(codProvincia)
     this.setState({
       municipios
     })
   }
-  loadMunicipios = async (codProvincia)=>{
-    this.setState({
-      provinciaSeleccionada : codProvincia
-    })
-    const url = "https://apis.datos.gob.ar/georef/api/municipios?provincia="+ codProvincia +"&campos=id,nombre&max=1000"
-    console.log(url)
-    var municipios
-    await fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-    })
-      .then(function (response) {
-        return response.json()
-      })
-      .then(function (rta) {
-       municipios = rta
-      }
-      )
-    return municipios
 
-  }
-  buildItemsPickerMunicipio = () =>{
-    const {municipios} = this.state
-    var items = []
-    if(municipios){
-      console.log("LOS MUNICIPIOS")
-      console.log(municipios.municipios)
-      municipios.municipios.map((municipio,key) => {
-        items.push({
-          label: municipio.nombre,
-          value: municipio.nombre,
-        })
-      })
-    }
 
-    return items
-  }
   showModal = () => {
-    const { modalVisible,altura,municipios} = this.state
-    const itemsPicker = this.buildItemsPicker()
+    const { modalVisible,altura,municipios,provincias} = this.state
+    const itemsPicker = buildItemsPicker(provincias)
     var itemsPickerMunicipios = []
     if(municipios){
-       itemsPickerMunicipios = this.buildItemsPickerMunicipio()
+       itemsPickerMunicipios = buildItemsPickerMunicipio(municipios)
     }
     if (modalVisible) {
       return (
@@ -186,42 +157,8 @@ class FinalizarCompra extends React.Component{
       return false
     } else return true
   }
-  loadProvincias = async () => {
-    const url = "https://apis.datos.gob.ar/georef/api/provincias?campos=id,nombre"
-    var provincias
-    await fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-    })
-      .then(function (response) {
-        return response.json()
-      })
-      .then(function (rta) {
-        provincias = rta
-      }
-      )
-    return provincias
-  }
-  async componentDidMount (){
-    const {productos} = this.props
-    const precioCompra =calcularPrecioTotalCarrito(productos)
-    const impuesto = precioCompra * 0.06
-    const envio = 450
-    const precioTotal = precioCompra + impuesto+envio
-    this.setState({
-      precioCompra,
-      impuesto,
-      envio,
-      precioTotal,
-    })
-    const provincias =await this.loadProvincias()
-    this.setState({
-      provincias : provincias.provincias
-    })
-  }
+
+
   showFormDataCard=()=>{
     const {numeroTarjetaInput, vencimientoInput, codigoSeguridadInput} = longitudDesdeadaInput
     return(
@@ -309,43 +246,7 @@ class FinalizarCompra extends React.Component{
         
       )
   }
-showCard=()=>{
-  return(
-    <FlipCard 
-     style={{marginTop:-200}}
-     friction={15}
-     perspective={4000}
-     flipHorizontal={true}
-     flipVertical={false}
-     flip={this.state.flip}
-     clickable={false}
-     onFlipEnd={()=>{this.setState({flip:false})}}
-     >
-     {/* Face Side */}
-     <View style={styles.face}>
-         <ImageBackground style={styles.image} source={require('../../imagenes/Adverso.png')}>
-         <View>
-             <Text style={{marginLeft:50}}>
-                 Hola
-             </Text>
-         </View>
-         </ImageBackground>
-     </View>
-     {/* Back Side */}
-     <View style={styles.back}>
-         <ImageBackground style={styles.image}  source={require('../../imagenes/reverso.png')}>
-             <View>
-             <Input
-               placeholder="Correo electronico"
-               containerStyle={styles.inputForm}
-               onChange={e => setEmail(e.nativeEvent.text)}
-             />
-             </View>
-         </ImageBackground>
-     </View>
-     </FlipCard>
-  )
-}
+
 
     render(){
         const {productos,mailUsuario} = this.props
@@ -362,7 +263,6 @@ showCard=()=>{
               {this.showModal()}
               {this.showTotalCard()}
               {this.showFormDataCard()}
-              {/* {this.showCard()} */}
               </ScrollView>
                 <Button 
                 buttonStyle={styles.botonSiguiente}

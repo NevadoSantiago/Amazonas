@@ -6,6 +6,7 @@ import { SET_PRODUCTOS_CARRITO } from "../../../constantes/login";
 import { showProductCardCarrito } from '../../../components/ProductCard'
 import { calcularPrecioTotalCarrito } from '../../../functions/FuncionesCarrito'
 import { withNavigation } from "react-navigation";
+import {loadProducts} from '../../../functions/FetchService'
 
 class MostrarCarrito extends React.Component {
 
@@ -16,38 +17,11 @@ class MostrarCarrito extends React.Component {
     }
   }
 
-  loadProducts = async (productos) => {
-    var productosCargados = null
-    if (!productos) {
-      console.log("No hay productos para buscar")
-    } else {
-      const url = backendUrl + "/products/getByIds"
-      await fetch(url, {
-        method: "POST",
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          idProductos: productos
-        })
-      })
-        .then(function (response) {
-          return response.json()
-        })
-        .then(function (rta) {
-          productosCargados = rta
-        }
-        ).catch((e) => {
-          console.log(e)
-        })
-    }
-    return productosCargados
-  }
+
   async componentDidMount() {
     const { productos, idProductos, setProductsStore } = this.props
     if (!productos && idProductos) {
-      const products = await this.loadProducts(idProductos)
+      const products = await loadProducts(idProductos)
       setProductsStore(products)
     }
 
@@ -55,7 +29,7 @@ class MostrarCarrito extends React.Component {
 
 
   render() {
-    const { productos,idProductos } = this.props
+    const { productos } = this.props
     if (productos && productos.length != 0) {
       var precioTotal = calcularPrecioTotalCarrito(productos)
       var tituloBoton = "Comprar   ( $" + precioTotal + ")"

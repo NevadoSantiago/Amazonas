@@ -1,11 +1,12 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { StyleSheet, View,AsyncStorage  } from "react-native";
+import { StyleSheet, View,AsyncStorage, Alert  } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
 import backendUrl from "../../utils/backendUrl";
 import { withNavigation } from "react-navigation";
 import {useDispatch} from 'react-redux'
 import {INICIAR_SESION} from '../../../constantes/login'
 import { Cache } from "react-native-cache";
+import CrearUsuario from "./CrearUsuario"
 
 const cache = new Cache({
   namespace: "myapp",
@@ -15,6 +16,11 @@ const cache = new Cache({
   backend: AsyncStorage
 });
 
+function alerta (titulo, mensaje, boton){
+  Alert.alert(titulo,mensaje, [
+      {text: boton, onPress:() =>console.log("alerta cerrada")}
+  ])
+}
 
 function RegisterForm(props) {
     const dispatch = useDispatch()
@@ -22,48 +28,9 @@ function RegisterForm(props) {
     const [hidePassword, setHidePassword] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-     const iniciarSesion = (datos) => dispatch({type:INICIAR_SESION, data:datos})
-    
-
-    const register = async () => {
-      if (!email || !password) {
-        console.log("ERROR todos los campos son obligatorios")
-      }else{
-      const url = backendUrl+"/users/new"
-      await fetch(url, {
-        method:"POST",
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email:email ,
-          pass: password,
-        })
-      })
-      .then(function(response){
-        return {
-                status: response.status,
-                respuesta: response.json()
-              }
-      })
-      .then(function(rta){
-        switch(rta.status){
-          case 201: console.log("Creado")
-          break;
-          case 401: console.log("Mail usado")
-          break
-          default: console.log("ERROR codigo: " + status)
-        }
-      }
-      ).catch(()=>{
-        console.log("ERROR DESCONOCIDO")
-      })
-    }
-  }
-
-
+    const [registrarse, setRegistrarse] = useState(false)
+    const iniciarSesion = (datos) => dispatch({type:INICIAR_SESION, data:datos})
+   
     const login = async () => {
       if (!email || !password) {
         console.log("ERROR todos los campos son obligatorios")
@@ -84,11 +51,12 @@ function RegisterForm(props) {
         switch(response.status){
           case 201: return response.json()
           break;
-          case 401: console.log("Mail incorrecto")
+          case 401: alerta("Email incorrecto", "La dirección de email es incorrecta o inexistente, reintentá!", "OK")
           break
-          case 402: console.log("Contrasena incorrecta")
+          //ver como manejar los otros errores para hacerlo mas personalizado
+          case 402: alerta("Datos incorrectos!", "Revisar el Email o Contraseña ingresadas!", "OK")
           break
-          default: console.log("ERROR codigo: " + status)
+          default: alerta("", "Ocurrió un error. "+ response.status)
         }
         
       })
@@ -103,6 +71,9 @@ function RegisterForm(props) {
   }
 
   return (
+    registrarse? 
+    <CrearUsuario setRegistrarse={setRegistrarse}/> 
+    : 
       <View style={styles.viewForm}>
         
         <View style={styles.formContainer}>
@@ -134,16 +105,19 @@ function RegisterForm(props) {
             }
         />
         <Button
-            title="Registrarse"
-            containerStyle={styles.btnContainerRegister}
-            buttonStyle={styles.btnRegister}
-            onPress={register}
-        />
-        <Button
             title="Logearse"
             containerStyle={styles.btnContainerRegister}
             buttonStyle={styles.btnRegister}
             onPress={login}
+        />
+
+          <Button
+            title="Registrarse"
+            containerStyle={styles.btnContainerRegister}
+            buttonStyle={styles.btnRegister}
+            onPress={()=>{
+              setRegistrarse(true)
+            }}
         />
         </View>
       </View>

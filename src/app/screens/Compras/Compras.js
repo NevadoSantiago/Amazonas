@@ -20,7 +20,7 @@ export default function ComprasScreen() {
 
 const initiateWhatsapp = async () =>{
     var number = '1159246486'
-    var msg = "Hola, tengo una consulta sobre una compra realizada! Q('.'Q)"
+    var msg = "Hola, quiero comunicarme con Amazonas para: "
     let url =
       'whatsapp://send?text=' + 
       msg +
